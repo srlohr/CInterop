@@ -23,13 +23,20 @@ import cinterop.composeapp.generated.resources.compose_multiplatform
 fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+        var apiBaseUrl by remember { mutableStateOf("") }
+
         Column(
             modifier = Modifier
                 .safeContentPadding()
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Button(onClick = { showContent = !showContent }) {
+            Button(
+                onClick = {
+                    showContent = !showContent
+                    apiBaseUrl = buildBuildConfiguration().apiBaseUrl
+                }
+            ) {
                 Text("Click me!")
             }
             AnimatedVisibility(showContent) {
@@ -38,6 +45,9 @@ fun App() {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
                     Text("Compose: $greeting")
                 }
+            }
+            if (!showContent && apiBaseUrl.isNotBlank()) {
+                Text(apiBaseUrl)
             }
         }
     }
